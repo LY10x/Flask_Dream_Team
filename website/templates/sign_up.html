@@ -1,48 +1,48 @@
-{% extends "base.html" %} {% block title %}signup{% endblock %} {% block content%}
-
-<form method="POST">
-    <h3 align="center">Sign up</h3>
-    <div class = "form-group">
+{% extends "base.html" %} {% block title %}Sign Up{% endblock %} {% block
+    content %}
+    <form method="POST">
+      <h3 align="center">Sign Up</h3>
+      <div class="form-group">
         <label for="email">Email Address</label>
         <input
-        type = "email"
-        class="form-control"
-        id="email"
-        name="email"
-        placeholder="Enter email"
-    </div>
-
-    <div class = "form-group">
-        <label for="fname">first name</label>
+          type="email"
+          class="form-control"
+          id="email"
+          name="email"
+          placeholder="Enter email"
+        />
+      </div>
+      <div class="form-group">
+        <label for="firstName">First Name</label>
         <input
-        type = "fname"
-        class="form-control"
-        id="fname"
-        name="fname"
-        placeholder="Enter first name"
-    </div>
-
-    <div class = "form-group">
-        <label for="password1">enter password</label>
+          type="text"
+          class="form-control"
+          id="firstName"
+          name="firstName"
+          placeholder="Enter first name"
+        />
+      </div>
+      <div class="form-group">
+        <label for="password1">Password</label>
         <input
-        type = "pass1"
-        class="form-control"
-        id="pass1"
-        name="pass1"
-        placeholder="Enter password"
-    </div>
-
-    <div class = "form-group">
-        <label for="password2">confirm password</label>
+          type="password"
+          class="form-control"
+          id="password1"
+          name="password1"
+          placeholder="Enter password"
+        />
+      </div>
+      <div class="form-group">
+        <label for="password2">Password (Confirm)</label>
         <input
-        type = "pass2"
-        class="form-control"
-        id="pass2"
-        name="pass2"
-        placeholder="confirm password"
-    </div>
-    <br />
-    <button type="submit" class="btn btn-primary">Submit</button>
-</form>
-
-{% endblock %}
+          type="password"
+          class="form-control"
+          id="password2"
+          name="password2"
+          placeholder="Confirm password"
+        />
+      </div>
+      <br />
+      <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
+    {% endblock %}
