@@ -1,5 +1,14 @@
 {% extends "base.html" %} {% block title %}Home{% endblock %} {% block content%}
 
-<h1>Home Page</h1>
+<form method='POST'>
+    <textarea name="gk" id="gk" class="form-control"></textarea>
+    <textarea name="cb" id="cb" class="form-control"></textarea>
+    <textarea name="cm" id="cm" class="form-control"></textarea>
+    <textarea name="wf" id="wf" class="form-control"></textarea>
+    <textarea name="st" id="st" class="form-control"></textarea>
+    <div align="center">
+        <button type="submit" class="btn btn-primary">Post team</button>
+    </div>
+</form>
 
 {% endblock %}

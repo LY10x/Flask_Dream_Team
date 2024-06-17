@@ -1,8 +1,8 @@
-# __init__.py
-
-from flask import Flask
-from flask_sqlalchemy import SQLAlchemy
+from flask import Flask # type: ignore
+from flask_sqlalchemy import SQLAlchemy # type: ignore
 from os import path
+from flask_login import LoginManager # type: ignore
+
 
 db = SQLAlchemy()
 DB_NAME = "database.db"
@@ -12,6 +12,8 @@ def create_app():
     app.config['SECRET_KEY'] = 'skibidi smeg'
     app.config['SQLALCHEMY_DATABASE_URI'] = f'sqlite:///{DB_NAME}'
     db.init_app(app)
+
+    
 
     from .views import views
     from .auth import auth
@@ -24,7 +26,18 @@ def create_app():
     with app.app_context():
 
         create_database()  
+    
+    login_manager = LoginManager()
+    login_manager.login_view = 'auth.login'
+    login_manager.init_app(app)
+
+    @login_manager.user_loader
+    def load_user(id):
+        return User.query.get(int(id))
+    
     return app
+
+
 
 def create_database():
     if not path.exists(DB_NAME):
