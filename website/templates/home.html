@@ -7,20 +7,41 @@ Home
 {% block content %}
 <h1 align="center">Team</h1>
 
-<!-- Display the list of teams above the form -->
 {% if teams %}
-<ul class="list-group list-group-flush" id="teams">
+<div class="team-container">
     {% for team in teams %}
-    <li class="list-group-item">
-        GK: {{ team.gk }}, CB: {{ team.cb }}, CM: {{ team.cm }}, WF: {{ team.wf }}, ST: {{ team.st }}
-    </li>
+    <div class="team-card">
+        <form class="team-form" data-id="{{ team.id }}">
+            <div class="team-formation">
+                <div class="team-row">
+                    <input type="text" class="form-control-plaintext" value="{{ team.gk }}" placeholder="Goalkeeper" readonly />
+                </div>
+                <div class="team-row">
+                    <input type="text" class="form-control-plaintext" value="{{ team.cb }}" placeholder="Centerback" readonly />
+                </div>
+                <div class="team-row">
+                    <input type="text" class="form-control-plaintext" value="{{ team.cm }}" placeholder="Midfielder" readonly />
+                </div>
+                <div class="team-row">
+                    <input type="text" class="form-control-plaintext" value="{{ team.wf }}" placeholder="Winger" readonly />
+                </div>
+                <div class="team-row">
+                    <input type="text" class="form-control-plaintext" value="{{ team.st }}" placeholder="Striker" readonly />
+                </div>
+            </div>
+            <div class="team-actions">
+                <button type="button" class="btn btn-warning edit-btn">Edit</button>
+                <button type="button" class="btn btn-danger delete-btn">Delete</button>
+            </div>
+        </form>
+    </div>
     {% endfor %}
-</ul>
+</div>
 {% else %}
 <p>No teams have been posted yet.</p>
 {% endif %}
 
-<form method="POST">
+<form id="post-team-form" method="POST">
     <div class="form-row">
         <div class="form-group col-md-2">
             <label for="gk">GK</label>
@@ -44,7 +65,136 @@ Home
         </div>
     </div>
     <div align="center">
-        <button type="submit" class="btn btn-primary">Post team</button>
+        <button type="button" class="btn btn-primary" id="post-team-btn">Post team</button>
     </div>
 </form>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    document.querySelectorAll('.edit-btn').forEach(button => {
+        button.addEventListener('click', function() {
+            const form = this.closest('.team-form');
+            const inputs = form.querySelectorAll('input');
+            
+            inputs.forEach(input => {
+                input.removeAttribute('readonly');
+                input.classList.remove('form-control-plaintext');
+                input.classList.add('form-control');
+            });
+
+            this.textContent = 'Save';
+            this.classList.remove('btn-warning');
+            this.classList.add('btn-success');
+            this.classList.remove('edit-btn');
+            this.classList.add('save-btn');
+
+            form.querySelector('.save-btn').addEventListener('click', function() {
+                const form = this.closest('.team-form');
+                const id = form.getAttribute('data-id');
+                const data = {
+                    gk: form.querySelector('input[placeholder="Goalkeeper"]').value,
+                    cb: form.querySelector('input[placeholder="Centerback"]').value,
+                    cm: form.querySelector('input[placeholder="Midfielder"]').value,
+                    wf: form.querySelector('input[placeholder="Winger"]').value,
+                    st: form.querySelector('input[placeholder="Striker"]').value
+                };
+
+                fetch(`/teams/${id}`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(data)
+                }).then(response => {
+                    if (response.ok) {
+                        window.location.reload();
+                    } else {
+                        console.error('Failed to update team');
+                    }
+                }).catch(error => {
+                    console.error('Error updating team:', error);
+                });
+            });
+        });
+    });
+
+    document.querySelectorAll('.delete-btn').forEach(button => {
+        button.addEventListener('click', function() {
+            const form = this.closest('.team-form');
+            const id = form.getAttribute('data-id');
+
+            fetch(`/teams/${id}`, {
+                method: 'DELETE'
+            }).then(response => {
+                if (response.ok) {
+                    window.location.reload();
+                } else {
+                    console.error('Failed to delete team');
+                }
+            }).catch(error => {
+                console.error('Error deleting team:', error);
+            });
+        });
+    });
+
+    document.getElementById('post-team-btn').addEventListener('click', function() {
+        const gk = document.getElementById('gk').value;
+        const cb = document.getElementById('cb').value;
+        const cm = document.getElementById('cm').value;
+        const wf = document.getElementById('wf').value;
+        const st = document.getElementById('st').value;
+
+        fetch('/', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded'
+            },
+            body: `gk=${encodeURIComponent(gk)}&cb=${encodeURIComponent(cb)}&cm=${encodeURIComponent(cm)}&wf=${encodeURIComponent(wf)}&st=${encodeURIComponent(st)}`
+        }).then(response => {
+            if (response.ok) {
+                window.location.reload();
+            } else {
+                console.error('Failed to post team');
+            }
+        }).catch(error => {
+            console.error('Error posting team:', error);
+        });
+    });
+});
+</script>
+
+<style>
+.team-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: center;
+}
+
+.team-card {
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    padding: 20px;
+    width: 250px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.team-formation {
+    display: grid;
+    grid-template-rows: repeat(5, auto);
+    gap: 10px;
+    margin-bottom: 15px;
+}
+
+.team-row {
+    display: flex;
+    justify-content: center;
+}
+
+.team-actions {
+    display: flex;
+    justify-content: space-between;
+}
+</style>
+
 {% endblock %}
