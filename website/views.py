@@ -1,5 +1,5 @@
-from flask import Blueprint, render_template, request, flash, jsonify, redirect, url_for
-from flask_login import login_required, current_user
+from flask import Blueprint, render_template, request, flash, jsonify, redirect, url_for # type: ignore
+from flask_login import login_required, current_user # type: ignore
 from .models import Team
 from . import db
 
