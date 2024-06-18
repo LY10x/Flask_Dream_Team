@@ -1,14 +1,50 @@
-{% extends "base.html" %} {% block title %}Home{% endblock %} {% block content%}
+{% extends "base.html" %}
 
-<form method='POST'>
-    <textarea name="gk" id="gk" class="form-control"></textarea>
-    <textarea name="cb" id="cb" class="form-control"></textarea>
-    <textarea name="cm" id="cm" class="form-control"></textarea>
-    <textarea name="wf" id="wf" class="form-control"></textarea>
-    <textarea name="st" id="st" class="form-control"></textarea>
+{% block title %}
+Home
+{% endblock %}
+
+{% block content %}
+<h1 align="center">Team</h1>
+
+<!-- Display the list of teams above the form -->
+{% if teams %}
+<ul class="list-group list-group-flush" id="teams">
+    {% for team in teams %}
+    <li class="list-group-item">
+        GK: {{ team.gk }}, CB: {{ team.cb }}, CM: {{ team.cm }}, WF: {{ team.wf }}, ST: {{ team.st }}
+    </li>
+    {% endfor %}
+</ul>
+{% else %}
+<p>No teams have been posted yet.</p>
+{% endif %}
+
+<form method="POST">
+    <div class="form-row">
+        <div class="form-group col-md-2">
+            <label for="gk">GK</label>
+            <input type="text" class="form-control" id="gk" name="gk" placeholder="Goalkeeper" />
+        </div>
+        <div class="form-group col-md-2">
+            <label for="cb">CB</label>
+            <input type="text" class="form-control" id="cb" name="cb" placeholder="Centerback" />
+        </div>
+        <div class="form-group col-md-2">
+            <label for="cm">CM</label>
+            <input type="text" class="form-control" id="cm" name="cm" placeholder="Midfielder" />
+        </div>
+        <div class="form-group col-md-2">
+            <label for="wf">WF</label>
+            <input type="text" class="form-control" id="wf" name="wf" placeholder="Winger" />
+        </div>
+        <div class="form-group col-md-2">
+            <label for="st">ST</label>
+            <input type="text" class="form-control" id="st" name="st" placeholder="Striker" />
+        </div>
+    </div>
     <div align="center">
         <button type="submit" class="btn btn-primary">Post team</button>
     </div>
 </form>
-
 {% endblock %}
