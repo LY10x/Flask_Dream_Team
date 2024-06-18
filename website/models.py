@@ -10,6 +10,17 @@ class Team(db.Model):
     st = db.Column(db.String(100))
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
 
+    def serialize(self):
+        return {
+            'id': self.id,
+            'gk': self.gk,
+            'cb': self.cb,
+            'cm': self.cm,
+            'wf': self.wf,
+            'st': self.st,
+            'user_id': self.user_id
+        }
+
 class User(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True)
     email = db.Column(db.String(150), unique=True, nullable=False)
