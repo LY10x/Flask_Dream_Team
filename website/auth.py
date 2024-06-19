@@ -20,8 +20,10 @@ def login():
         user = User.query.filter_by(email=email).first()
         if user:
             if check_password_hash(user.password, password):
-                login_user(user, remember=True)
-                return redirect(url_for('views.teams')) 
+                login_user(user, remember=True) 
+                response = redirect(url_for('views.teams'))
+                response.status_code = 200
+                return response
             else:
                 return jsonify({'error': 'Incorrect password, try again.'}), 400
         else:
@@ -65,6 +67,8 @@ def sign_up():
             db.session.add(new_user)
             db.session.commit()
             login_user(new_user, remember=True)
-            return redirect(url_for('views.teams'))
+            response = redirect(url_for('views.teams'))
+            response.status_code = 201
+            return response
 
     return render_template("sign_up.html", user=current_user)
